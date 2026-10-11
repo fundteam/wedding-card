@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ทำการ์ดตั้งโต๊ะงานแต่ง</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&family=Mali:wght@400;700&family=Pridi:wght@400;600&family=Prompt:wght@400;600&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{--ink:#1f2a27;--mut:#6b7774;--line:#e2e7e5;--bg:#e9edec;--panel:#fff;--acc:#2f6b57;--tint:#e8f1ed}
+[hidden]{display:none!important}
+body{margin:0;font-family:Prompt,Sarabun,sans-serif;font-size:14px;color:var(--ink);background:var(--bg);display:grid;grid-template-columns:340px 1fr 320px;grid-template-rows:56px 1fr;height:100vh}
+header{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-weight:600;font-size:16px;display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand i{width:30px;height:30px;border-radius:9px;background:var(--acc);color:#fff;display:grid;place-items:center;font-style:normal;font-size:15px}
+aside{background:var(--panel);overflow:auto;border-right:1px solid var(--line)}
+#right{border-right:0;border-left:1px solid var(--line)}
+details{border-bottom:1px solid var(--line);padding:0 18px}
+summary{list-style:none;cursor:pointer;padding:14px 0;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'';width:7px;height:7px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);margin-top:-3px;transition:transform .15s}
+details[open] summary::after{transform:rotate(-135deg);margin-top:3px}
+.sec{padding-bottom:16px}
+main{overflow:auto;padding:20px;display:flex;flex-direction:column;align-items:center;gap:14px;background-image:radial-gradient(#cdd5d2 1px,transparent 1px);background-size:20px 20px}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 4px}
+input,select,button,textarea{font:inherit;font-size:14px;color:var(--ink)}
+input[type=text],input[type=number],select,textarea{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--tint)}
+input[type=color]{width:100%;height:34px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=file]{font-size:12.5px;width:100%}
+.row{display:flex;gap:8px;align-items:end}.row>*{flex:1}
+.chk{display:flex;gap:8px;align-items:center;margin:10px 0}.chk input{margin:0;accent-color:var(--acc)}
+button{padding:7px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;transition:background .12s,border-color .12s}
+button:hover{background:var(--tint);border-color:#bcd3c9}
+button.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+button.pri:hover{background:#265a49}
+.list{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.list button{text-align:left;display:flex;justify-content:space-between;gap:8px;padding:8px 12px}
+.list button span:first-child{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.list button span:last-child{color:var(--mut)}
+.list button.on{background:var(--tint);border-color:var(--acc);color:var(--acc);font-weight:500}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.hint{font-size:12px;color:var(--mut);margin:8px 0 0;line-height:1.5}
+#props{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#f6f8f7}
+#bar{display:flex;gap:12px;align-items:center;font-size:13px;color:var(--mut);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 16px;box-shadow:0 1px 3px rgba(31,42,39,.08);flex:none}
+#bar input{width:150px}
+#bar button{border-radius:999px;padding:5px 14px}
+#cap{color:var(--ink);font-weight:500}
+#zl{min-width:40px;text-align:right}
+#stage{margin:auto;box-shadow:0 1px 2px rgba(31,42,39,.1),0 14px 44px rgba(31,42,39,.2);flex:none}
+aside,main{scrollbar-width:thin;scrollbar-color:#c5cfcb transparent}
+select{appearance:none;-webkit-appearance:none;padding-right:30px;cursor:pointer;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%236b7774' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 10px center/12px}
+textarea{resize:vertical;line-height:1.5}
+input[type=range]{-webkit-appearance:none;appearance:none;height:20px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:#d5dfdb}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--acc);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:#d5dfdb}
+input[type=range]::-moz-range-thumb{width:10px;height:10px;border-radius:50%;background:var(--acc);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=color]{cursor:pointer}
+input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+input[type=color]::-webkit-color-swatch{border:0;border-radius:6px}
+input[type=color]::-moz-color-swatch{border:0;border-radius:6px}
+.drop{display:flex;flex-direction:column;align-items:center;gap:3px;margin:0;padding:16px 10px;border:1.5px dashed #b4cbc1;border-radius:12px;background:#fff;color:var(--acc);font-size:14px;cursor:pointer;transition:.12s}
+.drop:hover,.drop.over{background:var(--tint);border-color:var(--acc)}
+.drop small{color:var(--mut);font-size:11.5px}
+button.danger{color:#b3392f}
+button.danger:hover{background:#fbeceb;border-color:#efc4c0}
+.btns>button{flex:1}
+.row>.chk{margin:0 0 9px;white-space:nowrap;flex:0 0 auto}
+#layers button{justify-content:flex-start;align-items:center}
+#layers button::before{content:'';flex:none;width:8px;height:8px;border-radius:2px;background:var(--acc)}
+#layers button[data-t=img]::before{background:#c08a3e}
+#layers button[data-t=frame]::before{background:#8a94a0;border-radius:50%}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- การ์ด: ตำแหน่งเป็น % ของการ์ด / ขนาดตัวอักษรเป็น cqmin จึงปรับตามขนาดกระดาษเอง ---------- */
+.card{position:relative;container-type:size;overflow:hidden}
+.el{position:absolute;line-height:1.3;white-space:pre-wrap;touch-action:none}
+.el img{display:block;width:100%;height:auto;-webkit-user-drag:none;user-select:none}
+.el.frame{border:solid;border-radius:2cqmin;pointer-events:none}
+#stage .el{cursor:move;user-select:none}
+#stage .el.sel{outline:2px dashed #2a7fff;outline-offset:2px}
+.hd{position:absolute;right:-6px;bottom:-6px;width:13px;height:13px;border-radius:50%;background:#2a7fff;border:2px solid #fff;cursor:nwse-resize;pointer-events:auto}
+
+/* ---------- พิมพ์ ---------- */
+#printArea{display:none}
+@media print{
+  body{display:block;height:auto;background:none}
+  aside,main,header,#toast{display:none!important}
+  #printArea{display:flex;flex-wrap:wrap;align-content:flex-start;width:210mm}
+  #printArea.one,#printArea.page{display:block;width:auto}
+  #printArea .pg{width:210mm;height:296.5mm;display:flex;flex-direction:column;align-items:center;overflow:hidden;break-after:page}
+  #printArea .pg:last-child{break-after:auto}
+  .card{flex:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printArea.cut .card{outline:.2mm dashed #aaa;outline-offset:-.2mm}
+  #printArea.one .card{break-after:page}
+  #printArea.one .card:last-child{break-after:auto}
+}
+@media (max-width:820px){body{grid-template-columns:1fr;grid-template-rows:auto;height:auto}aside,#right{border:0}main{min-height:70vh}header{flex-wrap:wrap;padding:10px 14px}}
+</style>
+<style id="pg"></style>
+</head>
+<body>
+<header>
+  <div class="brand"><i>♥</i>การ์ดตั้งโต๊ะงานแต่ง</div>
+  <button id="openBtn">เปิดไฟล์งาน</button>
+  <button id="saveBtn">บันทึกไฟล์งาน</button>
+  <button class="pri" id="print">พิมพ์ / PDF</button>
+  <input type="file" id="openFile" accept=".json,application/json" hidden>
+</header>
+<aside>
+<details open><summary>ขนาดและหน้ากระดาษ</summary><div class="sec">
+  <select id="preset"></select>
+  <div class="row">
+    <div><label>กว้าง (มม.)</label><input type="number" id="w" min="30" max="400"></div>
+    <div><label>สูง (มม.)</label><input type="number" id="h" min="30" max="400"></div>
+    <button id="swap">⇄ สลับ</button>
+  </div>
+  <p class="hint" id="fit"></p>
+  <label>การจัดหน้ากระดาษ</label>
+  <select id="mode">
+    <option value="sheet">ต่อกัน — เรียงหลายใบบน A4 (ตัดเอง)</option>
+    <option value="page">ขึ้นหน้า A4 ใหม่ทุกใบ</option>
+    <option value="one">ขึ้นหน้าใหม่ — ขนาดหน้าเท่าการ์ด</option>
+  </select>
+  <div id="posRow" hidden><label>ตำแหน่งการ์ดในหน้า</label>
+    <select id="pos"><option value="flex-start">บนสุดของหน้า</option><option value="center">กลางหน้า</option><option value="flex-end">ล่างสุดของหน้า</option></select></div>
+  <div class="row">
+    <div><label>สีพื้นหลัง</label><input type="color" id="bg"></div>
+    <div><label>ฟอนต์เริ่มต้น</label><select id="font"></select></div>
+  </div>
+
+  
+  <div class="chk"><input type="checkbox" id="cut"><span>มีเส้นประสำหรับตัด</span></div>
+  <p class="hint">ตอนพิมพ์: Margins = None, Scale = 100%, เปิด Background graphics</p>
+</div></details>
+<details open><summary>การ์ดแต่ละโต๊ะ</summary><div class="sec">
+  <div class="list" id="list"></div>
+  <div class="btns"><button id="add">+ เพิ่มการ์ด</button><button id="dup">ทำซ้ำ</button><button class="danger" id="del">ลบ</button></div>
+  <label>จำนวนที่พิมพ์ของใบนี้ (ใบ)</label><input type="number" id="n" min="1" max="50">
+  <label>เทมเพลตเลย์เอาต์</label>
+  <select id="tpl">
+    <option value="std">มาตรฐาน — รูปซ้าย (แนวตั้ง: รูปบน)</option>
+    <option value="right">รูปขวา (แนวตั้ง: รูปล่าง)</option>
+    <option value="text">ข้อความล้วน ไม่มีรูป</option>
+  </select>
+  <div class="btns"><button id="tplOne">ใช้กับใบนี้</button><button id="tplAll">ใช้กับทุกใบ</button></div>
+  <p class="hint">ใบที่ยังไม่ได้จัดวางเอง จะปรับตามเทมเพลตให้อัตโนมัติเมื่อเปลี่ยนขนาดการ์ด</p>
+
+  </div></details>
+
+<p class="hint" style="padding:4px 18px 20px">งานถูกบันทึกอัตโนมัติในเบราว์เซอร์นี้ ถ้าจะสำรองหรือย้ายเครื่อง กด "บันทึกไฟล์งาน" แล้วเปิดกลับมาแก้ได้ด้วย "เปิดไฟล์งาน"</p>
+</aside>
+
+<main id="main">
+  <div id="bar"><span id="cap"></span><input type="range" id="zoom" min=".2" max="4" step=".01"><span id="zl"></span><button id="fitBtn">พอดีหน้าจอ</button></div>
+  <div id="stage"></div>
+</main>
+<aside id="right">
+<details open><summary>องค์ประกอบในการ์ด</summary><div class="sec">
+  <div class="btns"><button id="addText">+ ข้อความ</button><button id="addImgBtn">+ รูป</button><button id="addFrame">+ กรอบ</button></div>
+  <input type="file" id="addimg" accept="image/*" hidden>
+  <p class="hint">คลิกในการ์ดเพื่อเลือก ลากเพื่อย้าย ลากจุดสีน้ำเงินเพื่อย่อ/ขยาย ลูกศรบนคีย์บอร์ดขยับทีละนิด, Delete ลบ</p>
+  <div class="list" id="layers"></div>
+
+  <div id="props" hidden>
+    <div data-t="text"><label>ข้อความ</label><textarea id="p_text" rows="2"></textarea></div>
+    <div data-t="text frame"><label>ขนาดตัวอักษร / ความหนากรอบ</label><input type="range" id="p_fs" min="1" max="30" step=".5"></div>
+    <div class="row" data-t="text frame"><div><label>สี</label><input type="color" id="p_color"></div>
+      <div data-t="text"><label>จัดชิด</label><select id="p_align"><option value="left">ซ้าย</option><option value="center">กลาง</option><option value="right">ขวา</option></select></div></div>
+    <div class="row" data-t="text"><div><label>ฟอนต์</label><select id="p_font"></select></div>
+      <div class="chk" style="flex:0 0 auto"><input type="checkbox" id="p_bold"><span>ตัวหนา</span></div></div>
+    <div data-t="img"><label>รูปภาพ</label><label class="drop" for="p_file"><b>เลือกรูปใหม่</b><small>หรือลากรูปมาวางที่นี่ · PNG / JPG</small></label><input type="file" id="p_file" accept="image/*" hidden></div>
+    <div data-t="text img frame"><label>หมุน</label><input type="range" id="p_rot" min="-45" max="45" step="1"></div>
+    <div data-t="text img frame"><label>ความโปร่งใส</label><input type="range" id="p_op" min=".1" max="1" step=".05"></div>
+    <div class="btns"><button id="p_up">ขึ้นบน</button><button id="p_down">ลงล่าง</button><button id="p_dup">ทำซ้ำ</button><button class="danger" id="p_del">ลบ</button></div>
+  </div>
+
+  </div></details>
+</aside>
+<div id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const DEF = 'couple.png', R = 1264 / 848;           // รูปเริ่มต้น และอัตราส่วนสูง/กว้าง
+const FOOT = 'ขอบคุณที่มาร่วมแสดงความยินดี';
+const PRESETS = {
+  third:  ['1/3 A4 แนวนอน (210×99 มม.)', 210, 99],
+  thirdv: ['1/3 A4 แนวตั้ง (99×210 มม.)', 99, 210],
+  a6:     ['A6 แนวนอน (148×105 มม.)', 148, 105],
+  a5:     ['A5 แนวนอน (210×148 มม.)', 210, 148],
+  small:  ['การ์ดเล็ก (90×55 มม.)', 90, 55],
+  custom: ['กำหนดเอง', 0, 0]
+};
+const FONTS = ['Mali', 'Sarabun', 'Prompt', 'Pridi', 'Kanit'];
+const uid = () => Math.random().toString(36).slice(2, 9);
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem('wc2-' + k)) || d } catch (e) { return d } };
+
+let S = Object.assign({ preset: 'third', w: 210, h: 99, font: 'Mali', bg: '#f5f1e5', mode: 'sheet', cut: true, zoom: 1, tpl: 'std', pos: 'flex-start', fit: true }, load('s', {}));
+let C = load('c', null), cur = 0, sel = null;
+
+/* ---------- เทมเพลต: สร้างองค์ประกอบเริ่มต้นตามขนาดการ์ด (หน่วยเป็น % ของการ์ด) ---------- */
+function tpl(kind, tx) {
+  const w = S.w, h = S.h, L = w >= h, px = v => v / w * 100, py = v => v / h * 100;
+  const T = (role, text, x, y, ww, fs, o) => ({ id: uid(), t: 'text', role, text: text || '', x, y, w: ww, fs,
+    color: '#4a3b2a', bold: 0, align: 'center', font: '', rot: 0, op: 1, ...o });
+  const fx = px(2.4), fy = py(2.4);
+  const els = [{ id: uid(), t: 'frame', x: fx, y: fy, w: 100 - 2 * fx, h: 100 - 2 * fy, fs: 5, color: '#b8935a', rot: 0, op: 1 }];
+  const img = (ix, iy, iw) => els.push({ id: uid(), t: 'img', x: px(ix), y: py(iy), w: px(iw), src: tx.img || '', rot: 0, op: 1 });
+  let tx0, tw, Y, fsg = L ? 12.5 : 11;
+  if (kind === 'text') {
+    tx0 = px(10); tw = 100 - 2 * tx0; fsg = L ? 16 : 14;
+    Y = L ? { g: 24, o: 52, s: 60, f: 78 } : { g: 30, o: 46, s: 52, f: 70 };
+  } else if (L) {
+    let ih = h * .9, iw = ih / R; if (iw > w * .4) { iw = w * .4; ih = iw * R }
+    const right = kind === 'right', ix = right ? w - iw - 7 : 7;
+    img(ix, h - ih - 3, iw);
+    const t0 = right ? 9 : ix + iw + 5, t1 = right ? ix - 5 : w - 9;
+    tx0 = px(t0); tw = px(t1 - t0); Y = { g: 22, o: 50, s: 58, f: 76 };
+  } else {
+    let ih = h * .36, iw = ih / R; if (iw > w * .75) { iw = w * .75; ih = iw * R }
+    const bottom = kind === 'right';
+    img((w - iw) / 2, bottom ? h - ih - 6 : 6, iw);
+    tx0 = px(7); tw = 100 - 2 * tx0;
+    Y = bottom ? { g: 10, o: 26, s: 32, f: 46 } : { g: 46, o: 62, s: 68, f: 84 };
+  }
+  els.push(T('g', tx.g, tx0, Y.g, tw, fsg, { bold: 1 }),
+    T('o', '♥', tx0, Y.o, tw, 4, { color: '#b8935a' }),
+    T('s', tx.s, tx0, Y.s, tw, 7, { color: '#b8935a', bold: 1 }),
+    T('f', tx.f, tx0, Y.f, tw, 4, { op: .8 }));
+  return els;
+}
+function applyTpl(c, kind) {   // ใช้เทมเพลตใหม่ แต่คงข้อความและรูปเดิมไว้
+  const tx = {};
+  c.els.forEach(e => { if (e.t === 'text' && e.role) tx[e.role] = e.text; if (e.t === 'img' && !tx.img) tx.img = e.src });
+  c.els = tpl(kind, tx); c.dirty = 0;
+}
+const newCard = (g, s) => ({ n: 1, dirty: 0, els: tpl(S.tpl, { g, s, f: FOOT }) });
+if (!C) C = [['ทีมเจ้าบ่าว', 'โต๊ะที่ 1'], ['ทีมเจ้าสาว', 'โต๊ะที่ 2'], ['ญาติฝั่งเจ้าบ่าว', 'โต๊ะที่ 3'],
+  ['ญาติฝั่งเจ้าสาว', 'โต๊ะที่ 4'], ['เพื่อนมหาวิทยาลัย', 'โต๊ะที่ 5']].map(a => newCard(...a));
+
+const save = () => { try { localStorage.setItem('wc2-s', JSON.stringify(S)); localStorage.setItem('wc2-c', JSON.stringify(C)) } catch (e) { /* รูปใหญ่เกินที่เก็บได้ */ } };
+const curEl = () => C[cur].els.find(e => e.id === sel);
+const dirty = () => { C[cur].dirty = 1 };
+
+/* ---------- วาดการ์ด ---------- */
+function place(n, e) {
+  const s = n.style;
+  s.left = e.x + '%'; s.top = e.y + '%'; s.width = e.w + '%'; s.opacity = e.op ?? 1;
+  s.transform = e.rot ? `rotate(${e.rot}deg)` : '';
+  if (e.t === 'frame') { s.height = e.h + '%'; s.borderColor = e.color; s.borderWidth = `calc(${e.fs} * .1cqmin)` }
+  if (e.t === 'text') {
+    s.fontSize = `calc(${e.fs} * 1cqmin)`; s.color = e.color; s.fontWeight = e.bold ? 700 : 400;
+    s.textAlign = e.align; s.fontFamily = `'${e.font || S.font}',sans-serif`;
+  }
+}
+function makeCard(c, h, edit) {
+  const d = document.createElement('div');
+  d.className = 'card';
+  d.style.cssText = `width:${S.w}mm;height:${h}mm;background:${S.bg}`;
+  c.els.forEach(e => {
+    const n = document.createElement('div');
+    n.className = 'el ' + e.t; n.dataset.id = e.id;
+    if (e.t === 'text') n.textContent = e.text;
+    if (e.t === 'img') { const i = new Image(); i.src = e.src || DEF; i.draggable = false; n.append(i) }
+    place(n, e);
+    if (edit && e.id === sel) { n.classList.add('sel'); const hd = document.createElement('i'); hd.className = 'hd'; n.append(hd) }
+    d.append(n);
+  });
+  return d;
+}
+const label = e => e.t === 'text' ? 'ข้อความ: ' + (e.text || '(ว่าง)').replace(/\n/g, ' ') : e.t === 'img' ? 'รูป' : 'กรอบ';
+function render() {
+  const st = $('stage');
+  if (S.fit) {   // ย่อ/ขยายให้การ์ดเต็มพื้นที่ที่เหลือ
+    const m = $('main'), cw = S.w * 96 / 25.4, ch = S.h * 96 / 25.4, wide = innerWidth <= 820;
+    const aw = m.clientWidth - 48, ah = wide ? 1e5 : m.clientHeight - 48 - $('bar').offsetHeight - 14;
+    S.zoom = Math.max(.2, Math.min(4, aw / cw, ah / ch));
+  }
+  st.style.zoom = S.zoom; $('zoom').value = S.zoom; $('zl').textContent = Math.round(S.zoom * 100) + '%';
+  $('cap').textContent = `${S.w} × ${S.h} มม.`;
+  st.replaceChildren(makeCard(C[cur], S.h, true));
+  const per = Math.floor(210 / S.w) * Math.floor(297 / S.h);
+  $('fit').textContent = per > 0 ? `วางบน A4 ได้ ${per} ใบ/หน้า` : 'ใหญ่กว่า A4 — เลือกโหมด 1 ใบ ต่อ 1 หน้า';
+  $('list').replaceChildren(...C.map((c, i) => {
+    const b = document.createElement('button'), g = c.els.find(e => e.role === 'g') || c.els.find(e => e.t === 'text');
+    b.className = i === cur ? 'on' : ''; b.innerHTML = '<span></span><span></span>';
+    b.children[0].textContent = (g && g.text) || '(ไม่มีชื่อ)'; b.children[1].textContent = '×' + (c.n || 1);
+    b.onclick = () => { cur = i; sel = null; $('n').value = c.n; render(); syncProps() };
+    return b;
+  }));
+  renderLayers(); save();
+}
+function renderLayers() {
+  $('layers').replaceChildren(...[...C[cur].els].reverse().map(e => {
+    const b = document.createElement('button'); b.className = e.id === sel ? 'on' : ''; b.dataset.t = e.t;
+    b.innerHTML = '<span></span>'; b.children[0].textContent = label(e);
+    b.onclick = () => { sel = e.id; render(); syncProps() };
+    return b;
+  }));
+}
+
+/* ---------- ลาก / ย่อขยาย ---------- */
+$('stage').addEventListener('pointerdown', ev => {
+  const n = ev.target.closest('.el');
+  if (!n) { if (sel) { sel = null; render(); syncProps() } return }
+  const id = n.dataset.id, hd = ev.target.classList.contains('hd');
+  if (sel !== id) { sel = id; render(); syncProps() }
+  const e = curEl(), node = $('stage').querySelector(`[data-id="${id}"]`);
+  const r = $('stage').firstChild.getBoundingClientRect(), sx = ev.clientX, sy = ev.clientY, o = { ...e };
+  let moved = false;
+  ev.preventDefault();
+  const rd = v => Math.round(v * 10) / 10;
+  const mv = m => {
+    const dx = (m.clientX - sx) / r.width * 100, dy = (m.clientY - sy) / r.height * 100;
+    moved = true;
+    if (hd) { e.w = Math.max(3, rd(o.w + dx)); if (e.t === 'frame') e.h = Math.max(3, rd(o.h + dy)) }
+    else { e.x = rd(o.x + dx); e.y = rd(o.y + dy) }
+    place(node, e);
+  };
+  const up = () => {
+    removeEventListener('pointermove', mv); removeEventListener('pointerup', up);
+    if (moved) { dirty(); save() }
+  };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up);
+});
+addEventListener('keydown', ev => {
+  const e = curEl(); if (!e || /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) return;
+  const st = ev.shiftKey ? 2 : .5, k = ev.key;
+  if (k === 'Delete' || k === 'Backspace') { C[cur].els = C[cur].els.filter(x => x !== e); sel = null; dirty(); render(); syncProps(); }
+  else if (k.startsWith('Arrow')) {
+    if (k === 'ArrowLeft') e.x -= st; if (k === 'ArrowRight') e.x += st;
+    if (k === 'ArrowUp') e.y -= st; if (k === 'ArrowDown') e.y += st;
+    dirty(); render(); ev.preventDefault();
+  }
+});
+
+/* ---------- แผงแก้ไของค์ประกอบที่เลือก ---------- */
+const FIELDS = ['text', 'fs', 'color', 'align', 'font', 'rot', 'op'];
+$('p_font').innerHTML = '<option value="">ฟอนต์เริ่มต้น</option>' + FONTS.map(f => `<option>${f}</option>`).join('');
+function syncProps() {
+  const e = curEl(); $('props').hidden = !e; if (!e) return;
+  document.querySelectorAll('#props [data-t]').forEach(r => r.hidden = !r.dataset.t.split(' ').includes(e.t));
+  FIELDS.forEach(k => { $('p_' + k).value = e[k] ?? (k === 'op' ? 1 : '') });
+  $('p_bold').checked = !!e.bold;
+}
+[...FIELDS, 'bold'].forEach(k => $('p_' + k).oninput = ev => {
+  const e = curEl(), t = ev.target;
+  e[k] = k === 'bold' ? (t.checked ? 1 : 0) : ['fs', 'rot', 'op'].includes(k) ? +t.value : t.value;
+  if (k !== 'text') dirty();
+  render();
+});
+const readImg = (f, cb) => {   // ย่อรูปไม่ให้ใหญ่เกิน เพื่อให้บันทึกในเบราว์เซอร์ได้
+  const url = URL.createObjectURL(f), im = new Image();
+  im.onload = () => {
+    const r = Math.min(1, 1200 / Math.max(im.width, im.height)), cv = document.createElement('canvas');
+    cv.width = im.width * r; cv.height = im.height * r;
+    cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+    URL.revokeObjectURL(url);
+    cb(cv.toDataURL(f.type === 'image/png' ? 'image/png' : 'image/jpeg', .9), im.height / im.width);
+  };
+  im.src = url;
+};
+$('p_file').onchange = ev => { const f = ev.target.files[0]; if (f) readImg(f, src => { curEl().src = src; ev.target.value = ''; render() }) };
+const dz = document.querySelector('.drop');   // ลากรูปมาวางเพื่อเปลี่ยนรูป
+dz.ondragover = ev => { ev.preventDefault(); dz.classList.add('over') };
+dz.ondragleave = () => dz.classList.remove('over');
+dz.ondrop = ev => {
+  ev.preventDefault(); dz.classList.remove('over');
+  const f = ev.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) readImg(f, src => { curEl().src = src; render() });
+};
+$('p_del').onclick = () => { C[cur].els = C[cur].els.filter(x => x.id !== sel); sel = null; dirty(); render(); syncProps() };
+$('p_dup').onclick = () => {
+  const e = curEl(), c = { ...e, id: uid(), x: e.x + 3, y: e.y + 3, role: '' };
+  C[cur].els.push(c); sel = c.id; dirty(); render(); syncProps();
+};
+const move = d => { const a = C[cur].els, i = a.findIndex(x => x.id === sel), j = i + d; if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; dirty(); render() };
+$('p_up').onclick = () => move(1); $('p_down').onclick = () => move(-1);
+
+/* ---------- เพิ่มองค์ประกอบ ---------- */
+const addEl = e => { C[cur].els.push(e); sel = e.id; dirty(); render(); syncProps() };
+$('addText').onclick = () => addEl({ id: uid(), t: 'text', role: '', text: 'ข้อความใหม่', x: 25, y: 40, w: 50, fs: 6,
+  color: '#4a3b2a', bold: 0, align: 'center', font: '', rot: 0, op: 1 });
+$('addFrame').onclick = () => addEl({ id: uid(), t: 'frame', x: 10, y: 10, w: 80, h: 80, fs: 5, color: '#b8935a', rot: 0, op: 1 });
+$('addImgBtn').onclick = () => $('addimg').click();
+$('addimg').onchange = ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  readImg(f, src => { addEl({ id: uid(), t: 'img', x: 30, y: 15, w: 35 * Math.min(1, S.h / S.w * 2), src, rot: 0, op: 1 }); ev.target.value = '' });
+};
+
+/* ---------- ขนาด / สไตล์ / การ์ด ---------- */
+function syncSettings() {
+  for (const k of ['w', 'h', 'font', 'bg', 'zoom', 'preset', 'mode', 'tpl', 'pos']) $(k).value = S[k];
+  $('posRow').hidden = S.mode !== 'page';
+  $('cut').checked = S.cut; $('n').value = C[cur].n;
+}
+function resized() {   // เปลี่ยนขนาด: จัดเลย์เอาต์ใหม่ให้ใบที่ยังไม่ได้ปรับเอง
+  const hit = Object.entries(PRESETS).find(([, v]) => v[1] === S.w && v[2] === S.h);
+  S.preset = hit ? hit[0] : 'custom'; $('preset').value = S.preset;
+  C.forEach(c => { if (!c.dirty) applyTpl(c, S.tpl) });
+  sel = null; render(); syncProps();
+}
+$('preset').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<option value="${k}">${v[0]}</option>`).join('');
+$('font').innerHTML = FONTS.map(f => `<option>${f}</option>`).join('');
+$('preset').onchange = ev => {
+  const p = PRESETS[ev.target.value];
+  if (p[1]) { S.w = p[1]; S.h = p[2]; syncSettings(); resized() } else { S.preset = 'custom' }
+};
+for (const k of ['w', 'h']) $(k).oninput = ev => { S[k] = Math.max(30, +ev.target.value || 30); resized() };
+$('swap').onclick = () => { [S.w, S.h] = [S.h, S.w]; syncSettings(); resized() };
+for (const k of ['font', 'bg', 'mode', 'pos']) $(k).oninput = ev => { S[k] = ev.target.value; $('posRow').hidden = S.mode !== 'page'; render() };
+$('zoom').oninput = ev => { S.zoom = +ev.target.value; S.fit = false; render() };
+$('fitBtn').onclick = () => { S.fit = true; render() };
+addEventListener('resize', () => { if (S.fit) render() });
+
+/* ---------- บันทึก / เปิดไฟล์งาน ---------- */
+let tt;
+const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2400) };
+$('saveBtn').onclick = () => {
+  const blob = new Blob([JSON.stringify({ app: 'wedding-table-cards', v: 1, S, C })], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `wedding-cards-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000); toast('บันทึกไฟล์งานแล้ว');
+};
+$('openBtn').onclick = () => $('openFile').click();
+$('openFile').onchange = ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (d.app !== 'wedding-table-cards' || !Array.isArray(d.C) || !d.C.length || !d.C.every(c => Array.isArray(c.els))) throw 0;
+      S = Object.assign({}, S, d.S, { fit: true }); C = d.C; cur = 0; sel = null;
+      syncSettings(); render(); syncProps(); toast('เปิดไฟล์งานแล้ว');
+    } catch (e) { toast('เปิดไฟล์ไม่ได้ — ไม่ใช่ไฟล์งานจากหน้านี้') }
+    ev.target.value = '';
+  };
+  r.readAsText(f);
+};
+$('cut').onchange = ev => { S.cut = ev.target.checked; save() };
+$('tpl').onchange = ev => { S.tpl = ev.target.value; save() };
+$('tplOne').onclick = () => { if (!C[cur].dirty || confirm('จัดวางใหม่ตามเทมเพลต? การปรับตำแหน่งที่ทำไว้ในใบนี้จะหาย')) { applyTpl(C[cur], S.tpl); sel = null; render(); syncProps() } };
+$('tplAll').onclick = () => { if (confirm('ใช้เทมเพลตกับทุกใบ? การปรับตำแหน่งที่ทำไว้จะหายทั้งหมด (ข้อความและรูปหลักยังอยู่)')) { C.forEach(c => applyTpl(c, S.tpl)); sel = null; render(); syncProps() } };
+$('n').oninput = ev => { C[cur].n = Math.max(1, +ev.target.value || 1); render() };
+$('add').onclick = () => { C.push(newCard('หัวข้อใหม่', 'โต๊ะที่ ' + (C.length + 1))); cur = C.length - 1; sel = null; syncSettings(); render(); syncProps() };
+$('dup').onclick = () => { C.splice(cur + 1, 0, JSON.parse(JSON.stringify(C[cur]))); C[cur + 1].els.forEach(e => e.id = uid()); cur++; sel = null; render(); syncProps() };
+$('del').onclick = () => { if (C.length < 2) return; C.splice(cur, 1); cur = Math.min(cur, C.length - 1); sel = null; syncSettings(); render(); syncProps() };
+
+/* ---------- พิมพ์ ---------- */
+$('print').onclick = () => {
+  const pa = $('printArea'), m = S.mode, sheet = m === 'sheet';
+  pa.className = m + (S.cut ? ' cut' : '');
+  pa.replaceChildren();
+  C.forEach(c => { for (let i = 0; i < (c.n || 1); i++) {
+    // โหมดต่อกัน: ลดความสูงนิดเดียวกันหน้าว่างเกินจากการปัดเศษ (เช่น 99×3 = 297 พอดี)
+    const card = makeCard(c, sheet ? S.h - .1 : S.h, false);
+    if (m === 'page') {
+      const pg = document.createElement('div'); pg.className = 'pg'; pg.style.justifyContent = S.pos;
+      pg.append(card); pa.append(pg);
+    } else pa.append(card);
+  } });
+  $('pg').textContent = m === 'one' ? `@page{size:${S.w}mm ${S.h}mm;margin:0}` : '@page{size:A4;margin:0}';
+  setTimeout(() => window.print(), 150);
+};
+
+syncSettings(); render();
+</script>
+</body>
+</html>
