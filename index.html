@@ -199,8 +199,21 @@ const FONTS = ['Mali', 'Sarabun', 'Prompt', 'Pridi', 'Kanit'];
 const uid = () => Math.random().toString(36).slice(2, 9);
 const load = (k, d) => { try { return JSON.parse(localStorage.getItem('wc2-' + k)) || d } catch (e) { return d } };
 
+/* รูปที่ซ้ำกัน (เช่น ทำซ้ำการ์ด) เก็บแค่ชุดเดียวในตาราง images แล้วอ้างอิงด้วยรหัส @1, @2 ... */
+const pack = cs => {
+  const m = new Map(), images = {};
+  const out = cs.map(c => ({ ...c, els: c.els.map(e => {
+    if (e.t !== 'img' || !e.src || !e.src.startsWith('data:')) return e;
+    let k = m.get(e.src);
+    if (!k) { k = '@' + (m.size + 1); m.set(e.src, k); images[k] = e.src }
+    return { ...e, src: k };
+  }) }));
+  return { C: out, images };
+};
+const unpack = d => d.C.map(c => ({ ...c, els: c.els.map(e => e.t === 'img' && d.images && d.images[e.src] ? { ...e, src: d.images[e.src] } : e) }));   // ไฟล์เก่าที่ไม่มี images ก็เปิดได้
 let S = Object.assign({ preset: 'third', w: 210, h: 99, font: 'Mali', bg: '#f5f1e5', mode: 'sheet', cut: true, zoom: 1, tpl: 'std', pos: 'flex-start', fit: true }, load('s', {}));
 let C = load('c', null), cur = 0, sel = null;
+if (C && !Array.isArray(C)) C = unpack(C);
 
 /* ---------- เทมเพลต: สร้างองค์ประกอบเริ่มต้นตามขนาดการ์ด (หน่วยเป็น % ของการ์ด) ---------- */
 function tpl(kind, tx) {
@@ -242,7 +255,7 @@ const newCard = (g, s) => ({ n: 1, dirty: 0, els: tpl(S.tpl, { g, s, f: FOOT }) 
 if (!C) C = [['ทีมเจ้าบ่าว', 'โต๊ะที่ 1'], ['ทีมเจ้าสาว', 'โต๊ะที่ 2'], ['ญาติฝั่งเจ้าบ่าว', 'โต๊ะที่ 3'],
   ['ญาติฝั่งเจ้าสาว', 'โต๊ะที่ 4'], ['เพื่อนมหาวิทยาลัย', 'โต๊ะที่ 5']].map(a => newCard(...a));
 
-const save = () => { try { localStorage.setItem('wc2-s', JSON.stringify(S)); localStorage.setItem('wc2-c', JSON.stringify(C)) } catch (e) { /* รูปใหญ่เกินที่เก็บได้ */ } };
+const save = () => { try { localStorage.setItem('wc2-s', JSON.stringify(S)); localStorage.setItem('wc2-c', JSON.stringify(pack(C))) } catch (e) { /* รูปใหญ่เกินที่เก็บได้ */ } };
 const curEl = () => C[cur].els.find(e => e.id === sel);
 const dirty = () => { C[cur].dirty = 1 };
 
@@ -360,7 +373,8 @@ const readImg = (f, cb) => {   // ย่อรูปไม่ให้ใหญ�
     cv.width = im.width * r; cv.height = im.height * r;
     cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
     URL.revokeObjectURL(url);
-    cb(cv.toDataURL(f.type === 'image/png' ? 'image/png' : 'image/jpeg', .9), im.height / im.width);
+    const w = cv.toDataURL('image/webp', .85);
+    cb(w.startsWith('data:image/webp') ? w : cv.toDataURL(f.type === 'image/png' ? 'image/png' : 'image/jpeg', .9), im.height / im.width);
   };
   im.src = url;
 };
@@ -420,11 +434,26 @@ addEventListener('resize', () => { if (S.fit) render() });
 /* ---------- บันทึก / เปิดไฟล์งาน ---------- */
 let tt;
 const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2400) };
-$('saveBtn').onclick = () => {
-  const blob = new Blob([JSON.stringify({ app: 'wedding-table-cards', v: 1, S, C })], { type: 'application/json' });
+const toWebp = url => new Promise(res => {   // บีบรูปเก่า (PNG/JPEG) เป็น WebP เฉพาะเมื่อเล็กลงจริง
+  if (url.startsWith('data:image/webp')) return res(url);
+  const im = new Image();
+  im.onload = () => {
+    const cv = document.createElement('canvas'); cv.width = im.naturalWidth; cv.height = im.naturalHeight;
+    cv.getContext('2d').drawImage(im, 0, 0);
+    const o = cv.toDataURL('image/webp', .85);
+    res(o.startsWith('data:image/webp') && o.length < url.length ? o : url);
+  };
+  im.onerror = () => res(url); im.src = url;
+});
+$('saveBtn').onclick = async () => {
+  toast('กำลังบีบอัดรูป…');
+  const { C: pc, images } = pack(C);
+  for (const k in images) images[k] = await toWebp(images[k]);
+  const blob = new Blob([JSON.stringify({ app: 'wedding-table-cards', v: 2, S, C: pc, images })], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = `wedding-cards-${new Date().toISOString().slice(0, 10)}.json`; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000); toast('บันทึกไฟล์งานแล้ว');
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast(`บันทึกไฟล์งานแล้ว (${Math.round(blob.size / 1024)} KB)`);
 };
 $('openBtn').onclick = () => $('openFile').click();
 $('openFile').onchange = ev => {
@@ -434,7 +463,7 @@ $('openFile').onchange = ev => {
     try {
       const d = JSON.parse(r.result);
       if (d.app !== 'wedding-table-cards' || !Array.isArray(d.C) || !d.C.length || !d.C.every(c => Array.isArray(c.els))) throw 0;
-      S = Object.assign({}, S, d.S, { fit: true }); C = d.C; cur = 0; sel = null;
+      S = Object.assign({}, S, d.S, { fit: true }); C = unpack(d); cur = 0; sel = null;
       syncSettings(); render(); syncProps(); toast('เปิดไฟล์งานแล้ว');
     } catch (e) { toast('เปิดไฟล์ไม่ได้ — ไม่ใช่ไฟล์งานจากหน้านี้') }
     ev.target.value = '';
